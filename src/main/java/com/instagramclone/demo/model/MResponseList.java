@@ -2,8 +2,12 @@ package com.instagramclone.demo.model;
 
 import lombok.Data;
 
+import java.util.List;
+
 @Data
-public class MResponse {
+public class MResponseList {
+
     private Boolean status;
-    private String data;
+    private List data;
+
 }

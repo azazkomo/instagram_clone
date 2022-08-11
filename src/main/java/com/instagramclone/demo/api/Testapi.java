@@ -1,10 +1,12 @@
 package com.instagramclone.demo.api;
 import com.instagramclone.demo.business.TestBusiness;
+import com.instagramclone.demo.exception.BaseException;
 import com.instagramclone.demo.model.MRegisterRequest;
 import com.instagramclone.demo.model.MResponse;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import com.instagramclone.demo.model.TestResponse;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 
@@ -41,9 +43,24 @@ public class Testapi {
         try {
             response = business.register(request);
             return ResponseEntity.ok(response);
-        } catch (IOException e) {
+        } catch (BaseException e) {
             responseData.setStatus(false);
-            responseData.setName(e.getMessage());
+            responseData.setData(e.getMessage());
+            return ResponseEntity.status(400).body(responseData);
+        }
+    }
+
+    @PostMapping
+    public ResponseEntity<Object> uploadProfilePicture(@RequestPart MultipartFile file) {
+        MResponse responseData = new MResponse();
+        try {
+            String response = business.uploadProfilePicture(file);
+            responseData.setStatus(true);
+            responseData.setData(response);
+            return ResponseEntity.status(200).body(responseData);
+        } catch (BaseException e) {
+            responseData.setStatus(false);
+            responseData.setData(e.getMessage());
             return ResponseEntity.status(400).body(responseData);
         }
     }
